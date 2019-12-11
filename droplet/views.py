@@ -22,14 +22,15 @@ def drop(request):
     return HttpResponse('hii, im drop')
 
 def lift(request, file_hash):
-    try:
-        myfile = File.objects.get(_hash=file_hash)
-        if myfile.is_expired():
-            myfile.delete()
-            raise ObjectDoesNotExist
-    except ObjectDoesNotExist:
-        return JsonResponse({
-            'error': 'File does not exist or expired'
-        })
+    if request.method == 'GET':
+        try:
+            myfile = File.objects.get(_hash=file_hash)
+            if myfile.is_expired():
+                myfile.delete()
+                raise ObjectDoesNotExist
+        except ObjectDoesNotExist:
+            return JsonResponse({
+                'error': 'File does not exist or expired'
+            })
 
-    return FileResponse(open(myfile._file.path, 'rb'))
+        return FileResponse(open(myfile._file.path, 'rb'))
