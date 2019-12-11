@@ -8,5 +8,5 @@ class File(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def is_expired(self):
-        return timezone.now() > self.created + timedelta(minutes=5)
+        return timezone.now() > self.created + timedelta(days=1)
     
